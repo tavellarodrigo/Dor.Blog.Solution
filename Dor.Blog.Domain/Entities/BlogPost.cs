@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Dor.Blog.Domain
+namespace Dor.Blog.Domain.Entities
 {
     public class BlogPost
     {
@@ -10,6 +10,8 @@ namespace Dor.Blog.Domain
         public string Content { get; set; } = string.Empty;
         public DateTime Created { get; set; } = DateTime.Now;
         public DateTime? Updated { get; set; } = null;
+
+        //crear constructor
 
     }
 }

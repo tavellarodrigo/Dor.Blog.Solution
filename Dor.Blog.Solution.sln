@@ -3,13 +3,21 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.8.34112.27
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dor.Blog.API", "Dor.Blog.API\Dor.Blog.API.csproj", "{D9C6A881-3F05-441E-B8A2-4C7A9361B8EB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dor.Blog.API", "Dor.Blog.API\Dor.Blog.API.csproj", "{D9C6A881-3F05-441E-B8A2-4C7A9361B8EB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dor.Blog.Application", "Dor.Blog.Application\Dor.Blog.Application.csproj", "{4CC0704C-BAF4-4D9F-8450-15CF96C4E519}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dor.Blog.Application", "Dor.Blog.Application\Dor.Blog.Application.csproj", "{4CC0704C-BAF4-4D9F-8450-15CF96C4E519}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dor.Blog.Infrastructure", "Dor.Blog.Infrastructure\Dor.Blog.Infrastructure.csproj", "{2A606299-305C-4DEC-A565-83E1AAB35683}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dor.Blog.Infrastructure", "Dor.Blog.Infrastructure\Dor.Blog.Infrastructure.csproj", "{2A606299-305C-4DEC-A565-83E1AAB35683}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dor.Blog.Domain", "Dor.Blog.Domain\Dor.Blog.Domain.csproj", "{2B3C62FC-F575-4098-83C1-6E598ACF9889}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dor.Blog.Domain", "Dor.Blog.Domain\Dor.Blog.Domain.csproj", "{2B3C62FC-F575-4098-83C1-6E598ACF9889}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{6430C41F-EF1C-478B-99E1-DC4EEDCE1149}"
+	ProjectSection(SolutionItems) = preProject
+		API.Test = API.Test
+		Domain.test = Domain.test
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dor.Middleware", "Dor.Middleware\Dor.Middleware.csproj", "{F22146EA-81E7-433E-AF01-74F14ECA6F21}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +41,10 @@ Global
 		{2B3C62FC-F575-4098-83C1-6E598ACF9889}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2B3C62FC-F575-4098-83C1-6E598ACF9889}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2B3C62FC-F575-4098-83C1-6E598ACF9889}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F22146EA-81E7-433E-AF01-74F14ECA6F21}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F22146EA-81E7-433E-AF01-74F14ECA6F21}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F22146EA-81E7-433E-AF01-74F14ECA6F21}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F22146EA-81E7-433E-AF01-74F14ECA6F21}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

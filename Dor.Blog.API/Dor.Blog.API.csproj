@@ -21,6 +21,7 @@
     <ProjectReference Include="..\Dor.Blog.Application\Dor.Blog.Application.csproj" />
     <ProjectReference Include="..\Dor.Blog.Domain\Dor.Blog.Domain.csproj" />
     <ProjectReference Include="..\Dor.Blog.Infrastructure\Dor.Blog.Infrastructure.csproj" />
+    <ProjectReference Include="..\Dor.Middleware\Dor.Middleware.csproj" />
   </ItemGroup>
 
 </Project>

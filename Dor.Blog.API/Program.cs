@@ -1,6 +1,13 @@
-using Dor.Blog.Application;
-using Dor.Blog.Domain;
+using AutoMapper;
+using Dor.Blog.Application.Authorization;
+using Dor.Blog.Application.Interfaces;
+using Dor.Blog.Application.Services;
+using Dor.Blog.Domain.Entities;
 using Dor.Blog.Infrastructure;
+using Dor.Blog.Infrastructure.Repositories;
+using Dor.Blog.Infrastructure.Utils;
+using Dor.Middleware;
+using Generic.Data.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -29,12 +36,22 @@ builder.Services.AddIdentity<User, IdentityRole>(options =>
     options.User.RequireUniqueEmail = true;
     options.SignIn.RequireConfirmedEmail = true;
 })
-.AddEntityFrameworkStores<BlogDbContext>()
+.AddEntityFrameworkStores<DataContext>()
+.AddSignInManager() //->>>>>
+//.AddRoleManager //-->
 .AddDefaultTokenProviders();
 
 
+//authorization
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("RequireAdministratorRole", policy =>
+        policy.RequireRole("Administrator"));
+});
 
- var secretKey = builder.Configuration.GetValue<string>("SecretKey");
+
+//authentication
+var secretKey = builder.Configuration.GetValue<string>("SecretKey");
 
  builder.Services.AddAuthentication(options =>
  {
@@ -58,11 +75,25 @@ builder.Services.AddIdentity<User, IdentityRole>(options =>
 
 var connectionString = builder.Configuration.GetConnectionString("BlogConnection") ?? throw new InvalidOperationException("Connection string 'BlogConnection' not found.");
 
-builder.Services.AddDbContext<BlogDbContext>(options =>
+builder.Services.AddDbContext<DataContext>(options =>
     options.UseSqlServer(connectionString));
 
-builder.Services.AddScoped<IBlogRepository, BlogRepository>();
+
+//general
+//builder.Services.AddScoped<IRepository, Repository>();
 builder.Services.AddScoped<IBlogService, BlogService>();
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
+builder.Services.AddScoped<IAuthenticationRepository, AuthenticationRepository>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+
+
+
+//Mapper
+var mappingConfig = new MapperConfiguration(mc => { mc.AddProfile(new MappingsProfile()); });
+builder.Services.AddSingleton(mappingConfig.CreateMapper());
+//MapperUtil
+builder.Services.AddSingleton<IMapperUtil, MapperUtil>();
 
 var app = builder.Build();
 
@@ -72,6 +103,12 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+else
+{
+//    app.UseMiddleware<ExceptionHandlingMiddleware>();
+}
+
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 app.UseHttpsRedirection();
 
