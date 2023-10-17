@@ -45,7 +45,6 @@ builder.Services.AddSwaggerGen(c =>
                 });
 });
 
-
 //identity
 builder.Services.AddIdentity<User, IdentityRole>(options =>
 {
@@ -53,16 +52,17 @@ builder.Services.AddIdentity<User, IdentityRole>(options =>
     options.Password.RequireLowercase = true;
     options.Password.RequireUppercase = true;
 
-    options.Lockout.MaxFailedAccessAttempts = 15;
+    options.Lockout.MaxFailedAccessAttempts = 5;
     options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(90);
 
     options.User.RequireUniqueEmail = true;
     options.SignIn.RequireConfirmedEmail = false;
 })
 .AddEntityFrameworkStores<DataContext>()
-.AddSignInManager() //->>>>>
-//.AddRoleManager //-->
-.AddDefaultTokenProviders();
+.AddSignInManager() 
+//.AddRoleManager() //-->
+.AddDefaultTokenProviders()
+.AddRoles<IdentityRole>();
 
 
 //authorization
@@ -74,7 +74,9 @@ builder.Services.AddIdentity<User, IdentityRole>(options =>
 
 
 //authentication
-var secretKey = builder.Configuration.GetValue<string>("SecretKey");
+var secretKey = builder.Configuration.GetValue<string>("JWT:SecretKey");
+var cValidAudience = builder.Configuration.GetValue<string>("JWT:ValidAudience");
+var cValidIssuer = builder.Configuration.GetValue<string>("JWT:ValidIssuer");
 
 builder.Services.AddAuthentication(options =>
 {
@@ -87,11 +89,13 @@ options.DefaultSignInScheme = JwtBearerDefaults.AuthenticationScheme;
            new Microsoft.IdentityModel.Tokens.TokenValidationParameters
            {
                ValidateIssuerSigningKey = true,
-               IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("RodrigoPaola.2905")),
-               ValidateIssuer = false,
+               IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey??"")),
+               ValidAudience = cValidAudience,
+               ValidIssuer = cValidIssuer,
                ValidateAudience = false,
-               ValidateLifetime = true,
-               ClockSkew = TimeSpan.Zero
+               ValidateIssuer = false,
+               ValidateLifetime = true
+               ,ClockSkew = TimeSpan.Zero
            };
      });
 
@@ -106,6 +110,9 @@ var connectionString = builder.Configuration.GetConnectionString("BlogConnection
 
 builder.Services.AddDbContext<DataContext>(options =>
     options.UseSqlServer(connectionString));
+
+//builder.Services.AddScoped<DbInitializer>();
+
 
 
 //general
@@ -139,8 +146,22 @@ else
 //    app.UseMiddleware<ExceptionHandlingMiddleware>();
 }
 
+    using (var scope = app.Services.CreateScope())
+    try
+    {
+        var scopedContext = scope.ServiceProvider.GetRequiredService<DataContext>();
+        var userManager = scope.ServiceProvider.GetRequiredService<UserManager<User>>();
+        var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+        DbInitializer init = new DbInitializer();
+        await init.InitializeAsync(userManager, roleManager, scopedContext);
 
-//app.UseMiddleware<ExceptionHandlingMiddleware>();
+    }
+    catch
+    {
+        throw;
+    }
+
+        app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 app.UseHttpsRedirection();
 

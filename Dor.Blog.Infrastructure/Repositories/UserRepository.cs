@@ -1,7 +1,6 @@
 using Dor.Blog.Application.Interfaces;
 using Dor.Blog.Domain.Entities;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using System.Transactions;
 
 namespace Dor.Blog.Infrastructure.Repositories
@@ -11,7 +10,8 @@ namespace Dor.Blog.Infrastructure.Repositories
         private readonly UserManager<User> _userManager;
 
         private readonly DataContext _context;
-        public UserRepository(UserManager<User> userManager, DataContext context)
+
+        public UserRepository(UserManager<User> userManager,DataContext context)
         : base(context)
         {
             _userManager = userManager;
@@ -24,7 +24,7 @@ namespace Dor.Blog.Infrastructure.Repositories
             {
                 var result = await _userManager.CreateAsync(User, Password);
                 if (result.Succeeded)
-                {
+                {                    
                     await _userManager.AddToRolesAsync(User, User.RoleNames);
                 }
                 scope.Complete();
@@ -33,8 +33,18 @@ namespace Dor.Blog.Infrastructure.Repositories
         }
 
         public async Task<User?> GetUserByUserName(string userName)
-        {
-            return await _context.Users.FirstOrDefaultAsync(user => user.UserName == userName);
+        { 
+
+            User? userSearched = await _userManager.FindByNameAsync(userName);
+            
+            if (userSearched == null)
+                return null;
+
+            //get role list
+            var roles = await _userManager.GetRolesAsync(userSearched);
+            userSearched.RoleNames = roles;
+            
+            return userSearched;
         }
 
         //public async Task<User> GetUserById(int id)

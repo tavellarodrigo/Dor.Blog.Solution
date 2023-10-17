@@ -7,8 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Dor.Blog.API.Controllers
 {
-    [Route("api/[controller]")]
-    
+    [Route("api/[controller]")]       
     [ApiController]
     public class AuthenticationController : ControllerBase
     {

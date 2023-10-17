@@ -7,7 +7,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Dor.Blog.API.Controllers
 {
-    [Authorize]
+    [Authorize(Roles ="Admin")]
+    //[Authorize]
     [Route("api/[controller]")]    
     [ApiController]
     public class UserController : ControllerBase
@@ -36,9 +37,20 @@ namespace Dor.Blog.API.Controllers
             };
 
             string password = userDTO.Password;
-            //var userResponse = await _userService.CreateAsync(user, password);
+            var result = await _userService.CreateAsync(user, password);
+            if (result == null)
+            {
+                return UnprocessableEntity();                
+
+            }
 
             return Ok(userDTO);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Get()
+        {
+            return Ok("All ok");
         }
 
     }

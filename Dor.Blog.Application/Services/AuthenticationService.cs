@@ -33,7 +33,7 @@ namespace Dor.Blog.Application.Services
 
             }
 
-            var res = await _unitOfWork.AuthenticationRepository.CheckUsernameAndPassword(user, credential.Password);
+            var res = await _unitOfWork.AuthenticationRepository.CheckPasswordSignInAsync(user, credential.Password);
 
             if (!res.Succeeded)
             {
@@ -41,31 +41,34 @@ namespace Dor.Blog.Application.Services
                 return await Task.FromException<User>(error);
             }
 
-            //generate token            
-            string secretKey = _config.GetSection("SecretKey").Value ?? "";           
-
-            //user.token = GenerateJwtToken(user.UserName??"",secretKey);
-            user.token = await GenerateJwtToken(user, secretKey);
+            //generate token
+            user.token = await GenerateJwtToken(user);
 
             return user;
         }
 
-        private async Task<string> GenerateJwtToken(User user, string secret)
+        private async Task<string> GenerateJwtToken(User user)
         {
-            var secretKey = Encoding.UTF8.GetBytes("RodrigoPaola.2905");
+            string secretKey = _config.GetSection("JWT:SecretKey").Value ?? "";
+
             var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                 new Claim(ClaimTypes.Name, user.UserName??"")
             };
 
+            foreach (var role in user.RoleNames){
+                claims.Add(new Claim(ClaimTypes.Role, user.RoleNames.FirstOrDefault() ?? ""));
+            }
+            
+
             // generate the JWT
             var jwt = new JwtSecurityToken(
-                    //claims: claims,
-                    notBefore: DateTime.UtcNow,
-                    expires: DateTime.Now.AddHours(30),
+                    claims: claims,
+                    notBefore: DateTime.Now,
+                    expires: DateTime.Now.AddMinutes(30),
                     signingCredentials: new SigningCredentials(
-                        new SymmetricSecurityKey(secretKey),
+                        new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey)),
                         SecurityAlgorithms.HmacSha256Signature)
                 );
 

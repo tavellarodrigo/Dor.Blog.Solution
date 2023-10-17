@@ -22,9 +22,9 @@ namespace Generic.Data.Repositories
             return new User();
         }        
 
-        public async Task<SignInResult> CheckUsernameAndPassword(User user, string password)
+        public async Task<SignInResult> CheckPasswordSignInAsync(User user, string password)
         {
-            var result = await _signInManager.CheckPasswordSignInAsync(user, password, false);
+            var result = await _signInManager.CheckPasswordSignInAsync(user, password, false);            
 
             return result;
 

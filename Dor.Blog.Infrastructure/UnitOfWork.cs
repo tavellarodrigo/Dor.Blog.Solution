@@ -44,20 +44,19 @@ namespace Dor.Blog.Infrastructure
 
         public void BeginTransaction()
         {
-            // Iniciar transacción
+            
         }
 
         public void Commit()
         {
-            // Confirmar transacción
+            
         }
 
         public void Rollback()
         {
-            // Revertir transacción
+            
         }
-
-        // Otros métodos relacionados con la gestión de transacciones y la persistencia
+        
     }
 
 }
