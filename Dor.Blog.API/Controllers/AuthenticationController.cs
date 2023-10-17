@@ -4,12 +4,11 @@ using Dor.Blog.Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-//using WebApiJwt.Models;
 
 namespace Dor.Blog.API.Controllers
 {
     [Route("api/[controller]")]
-    //[Authorize]
+    
     [ApiController]
     public class AuthenticationController : ControllerBase
     {
@@ -33,12 +32,11 @@ namespace Dor.Blog.API.Controllers
 
         [HttpPost]
         public async Task<IActionResult> Authenticate(CredentialDTO credentialDTO)
-        {          
-            
-
+        {
             var credential = _mapper.Map<CredentialDTO, Credential>(credentialDTO);
 
             var user = await _authenticationService.Authenticate(credential);
+
             if (user == null)
             {
                 return NotFound();

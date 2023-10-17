@@ -1,6 +1,4 @@
 ﻿using Dor.Blog.Application.Interfaces;
-using Dor.Blog.Domain;
-using Dor.Blog.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 
@@ -14,6 +12,7 @@ namespace Dor.Blog.Infrastructure.Repositories
         {
             this.Context = context;
         }
+        
         public async Task AddAsync(TEntity entity)
         {
             await Context.Set<TEntity>().AddAsync(entity);

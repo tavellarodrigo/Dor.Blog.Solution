@@ -1,18 +1,15 @@
-﻿using Dor.Blog.Application.Authorization;
-using Dor.Blog.Application.Interfaces;
+﻿using Dor.Blog.Application.Interfaces;
 using Dor.Blog.Domain.Entities;
 using Dor.Blog.Infrastructure.Repositories;
 using Generic.Data.Repositories;
 using Microsoft.AspNetCore.Identity;
-using System.Data;
 
 namespace Dor.Blog.Infrastructure
 {
     public class UnitOfWork : IUnitOfWork
     {
         
-        private readonly DataContext _context;
-        //private ClientRepository _clientRepository;
+        private readonly DataContext _context;        
 
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly UserManager<User> _userManager;
@@ -43,12 +40,7 @@ namespace Dor.Blog.Infrastructure
             {
                 return _authenticationRepository = _authenticationRepository ?? new AuthenticationRepository(_signInManager, _context);
             }
-        }
-
-        public async Task<User> Authenticate(Credential credential)
-        {         
-            return new User();
-        }
+        }      
 
         public void BeginTransaction()
         {

@@ -1,6 +1,5 @@
-﻿using Dor.Blog.Application.Authorization;
-using Dor.Blog.Application.Interfaces;
-using Microsoft.AspNetCore.Mvc;
+﻿using Dor.Blog.Application.Interfaces;
+using Dor.Blog.Domain.Entities;
 
 namespace Dor.Blog.Application.Services
 {
@@ -13,32 +12,31 @@ namespace Dor.Blog.Application.Services
             _unitOfWork = unitOfWork;
         }
 
-      
+        public Task<int> CreateAsync(BlogPost obj)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> DeleteAsync(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<IEnumerable<BlogPost>> GetAsync()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<BlogPost> GetByIdAsync(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> UpdateAsync(BlogPost post)
+        {
+            throw new NotImplementedException();
+        }
 
 
-        //public Task<IEnumerable<BlogPost>> GetPostsAsync()
-        //{
-        //    return _blogRepository.GetPostsAsync();
-        //}
-
-        //public Task<BlogPost> GetPostByIdAsync(int id)
-        //{
-        //    return _blogRepository.GetPostByIdAsync(id);
-        //}
-
-        //public Task<int> CreatePostAsync(BlogPost post)
-        //{
-        //    return _blogRepository.CreatePostAsync(post);
-        //}
-
-        //public Task<bool> UpdatePostAsync(BlogPost post)
-        //{
-        //    return _blogRepository.UpdatePostAsync(post);
-        //}
-
-        //public Task<bool> DeletePostAsync(int id)
-        //{
-        //    return _blogRepository.DeletePostAsync(id);
-        //}
     }
 }

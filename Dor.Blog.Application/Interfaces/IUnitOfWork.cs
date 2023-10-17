@@ -1,7 +1,4 @@
-﻿using Dor.Blog.Application.Authorization;
-using Dor.Blog.Domain.Entities;
-
-namespace Dor.Blog.Application.Interfaces
+﻿namespace Dor.Blog.Application.Interfaces
 {
     // En el proyecto MyProject.Infrastructure
     public interface IUnitOfWork 
@@ -9,8 +6,7 @@ namespace Dor.Blog.Application.Interfaces
         void BeginTransaction();
         void Commit();
         void Rollback();
-        Task<User> Authenticate(Credential credential);
-        
+        //Task<User> Authenticate(Credential credential);        
 
         IUserRepository UserRepository { get; }
         IAuthenticationRepository AuthenticationRepository { get; }

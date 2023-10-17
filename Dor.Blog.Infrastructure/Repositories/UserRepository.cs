@@ -18,45 +18,6 @@ namespace Dor.Blog.Infrastructure.Repositories
             _context = context;
         }
 
-        public async Task<User> GetUserById(int id)
-        {
-            var userFrom = await _context.Users.AsNoTracking()
-            .Select(user => new User
-            {
-                Id = user.Id,
-                UserName = user.UserName,
-                Name = user.Name,
-                LastName = user.LastName
-                ,
-                SecurityStamp = user.SecurityStamp
-                ,
-                PasswordHash = user.PasswordHash
-                ,
-                Status = user.Status
-            })
-            .FirstOrDefaultAsync(user => int.Parse(user.Id) == id);
-
-            return userFrom;
-
-        }
-        public async Task<IEnumerable<User>> GetUsers()
-        {
-            //var roles = _userManager.GetRolesAsync()
-            var users = await _userManager.Users.AsNoTracking()
-            .Select(user => new User
-            {
-                Id = user.Id,
-                UserName = user.UserName,
-                Name = user.Name,
-                LastName = user.LastName
-                ,
-                SecurityStamp = user.SecurityStamp
-                ,
-                Status = user.Status
-            }).ToListAsync();
-
-            return users;
-        }
         public async Task<User> CreateUser(User User, String Password)
         {
             using (TransactionScope scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
@@ -70,64 +31,84 @@ namespace Dor.Blog.Infrastructure.Repositories
             }
             return User;
         }
-        public async Task<User> GetUserRoles(User user)
-        {
-            user.RoleNames = await _userManager.GetRolesAsync(user);
-            return user;
-        }
 
-        public async Task<User> AddUserRoles(User user, IEnumerable<string> rolesForAdd, IEnumerable<string> rolesForExclude)
-        {
-            await _userManager.AddToRolesAsync(user, rolesForAdd.Except(rolesForExclude));
-            return user;
-        }
-        public async Task<User> RemoveUserRoles(User user, IEnumerable<string> rolesForRemove, IEnumerable<string> rolesForExclude)
-        {
-            await _userManager.RemoveFromRolesAsync(user, rolesForRemove.Except(rolesForExclude));
-            return user;
-        }
-        public async Task<User> UpdateUser(User userForBeUpdated)
-        {
-            IdentityResult result = await _userManager.UpdateAsync(userForBeUpdated);
-
-            //var userFromRepo = await GetUserById(userForBeUpdated.Id);
-
-            return userForBeUpdated;
-        }
         public async Task<User?> GetUserByUserName(string userName)
         {
-            //var userFrom = await _context.Users.AsNoTracking()
-            //.Select(user => new User
-            //{
-            //    Id = user.Id
-            //    ,
-            //    UserName = user.UserName
-            //    ,
-            //    Name = user.Name
-            //    ,
-            //    LastName = user.LastName
-            //    ,
-            //    SecurityStamp = user.SecurityStamp
-            //    ,
-            //    PasswordHash = user.PasswordHash
-            //    ,
-            //    Status = user.Status
-            //})
-            //.FirstOrDefaultAsync(user => user.UserName == userName);
-
-            //return userFrom;
-
             return await _context.Users.FirstOrDefaultAsync(user => user.UserName == userName);
-
         }
-        public async Task<User> ResetPassword(User user, string newPassword)
-        {
-            var token = await _userManager.GeneratePasswordResetTokenAsync(user);
 
-            var result = await _userManager.ResetPasswordAsync(user, token, newPassword);
+        //public async Task<User> GetUserById(int id)
+        //{
+        //    var userFrom = await _context.Users.AsNoTracking()
+        //    .Select(user => new User
+        //    {
+        //        Id = user.Id,
+        //        UserName = user.UserName,
+        //        Name = user.Name,
+        //        LastName = user.LastName
+        //        ,
+        //        SecurityStamp = user.SecurityStamp
+        //        ,
+        //        PasswordHash = user.PasswordHash
+        //        ,
+        //        Status = user.Status
+        //    })
+        //    .FirstOrDefaultAsync(user => int.Parse(user.Id) == id);
 
-            return user;
-        }
+        //    return userFrom;
+
+        //}
+        //public async Task<IEnumerable<User>> GetUsers()
+        //{
+        //    //var roles = _userManager.GetRolesAsync()
+        //    var users = await _userManager.Users.AsNoTracking()
+        //    .Select(user => new User
+        //    {
+        //        Id = user.Id,
+        //        UserName = user.UserName,
+        //        Name = user.Name,
+        //        LastName = user.LastName
+        //        ,
+        //        SecurityStamp = user.SecurityStamp
+        //        ,
+        //        Status = user.Status
+        //    }).ToListAsync();
+
+        //    return users;
+        //}
+
+        //public async Task<User> GetUserRoles(User user)
+        //{
+        //    user.RoleNames = await _userManager.GetRolesAsync(user);
+        //    return user;
+        //}
+        //public async Task<User> AddUserRoles(User user, IEnumerable<string> rolesForAdd, IEnumerable<string> rolesForExclude)
+        //{
+        //    await _userManager.AddToRolesAsync(user, rolesForAdd.Except(rolesForExclude));
+        //    return user;
+        //}
+        //public async Task<User> RemoveUserRoles(User user, IEnumerable<string> rolesForRemove, IEnumerable<string> rolesForExclude)
+        //{
+        //    await _userManager.RemoveFromRolesAsync(user, rolesForRemove.Except(rolesForExclude));
+        //    return user;
+        //}
+        //public async Task<User> UpdateUser(User userForBeUpdated)
+        //{
+        //    IdentityResult result = await _userManager.UpdateAsync(userForBeUpdated);
+
+        //    //var userFromRepo = await GetUserById(userForBeUpdated.Id);
+
+        //    return userForBeUpdated;
+        //}
+
+        //public async Task<User> ResetPassword(User user, string newPassword)
+        //{
+        //    var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+
+        //    var result = await _userManager.ResetPasswordAsync(user, token, newPassword);
+
+        //    return user;
+        //}
     }
 }
 

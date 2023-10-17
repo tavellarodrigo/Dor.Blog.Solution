@@ -1,5 +1,4 @@
-﻿using Dor.Blog.Domain.Entities;
-using System.Linq.Expressions;
+﻿using System.Linq.Expressions;
 
 namespace Dor.Blog.Application.Interfaces
 {
