@@ -1,15 +1,17 @@
-﻿namespace Dor.Blog.Application.Interfaces
+﻿using Dor.Blog.Domain.Entities;
+
+namespace Dor.Blog.Application.Interfaces
 {
     public interface IService <T> where T : class
     {
-        Task<IEnumerable<T>> GetAsync();
+        Task<BaseResponse<IEnumerable<T>>> GetAsync();
 
-        Task<T> GetByIdAsync(int id);
+        Task<BaseResponse<T>> GetByIdAsync(int id);
 
-        Task<int> CreateAsync(T obj);
+        Task<BaseResponse<T>> CreateAsync(T entity);
 
-        public Task<bool> UpdateAsync(T post);
+        Task<BaseResponse<T>> UpdateAsync(int id, T entity);
 
-        Task<bool> DeleteAsync(int id);        
+        Task<BaseResponse<T>> DeleteAsync(int id);        
     }
 }

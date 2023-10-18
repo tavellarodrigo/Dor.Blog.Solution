@@ -2,7 +2,7 @@
 
 namespace Dor.Blog.Application.Authorization
 {
-    public class CredentialDTO
+    public record CredentialDTO
     {
         public string UserName { get; set; } = string.Empty;  
         public string Password { get; set; } = string.Empty;

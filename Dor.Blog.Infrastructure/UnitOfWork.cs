@@ -16,21 +16,26 @@ namespace Dor.Blog.Infrastructure
         private readonly SignInManager<User> _signInManager;
         private UserRepository _userRepository;
         private AuthenticationRepository _authenticationRepository;
+        private BlogRepository _blogRepository;
 
 
-        public UnitOfWork(DataContext context, RoleManager<IdentityRole> roleManager, UserManager<User> userManager, SignInManager<User> signInManager)
+        public UnitOfWork(DataContext context, 
+            RoleManager<IdentityRole> roleManager, 
+            UserManager<User> userManager, 
+            SignInManager<User> signInManager)
         {
             this._context = context;
             this._roleManager = roleManager;
             this._userManager = userManager;
             this._signInManager = signInManager;
+            
         }
 
         public IUserRepository UserRepository
         {
             get
             {
-                return _userRepository = _userRepository ?? new UserRepository(_userManager, _context);
+                return _userRepository = _userRepository ?? new UserRepository(_userManager);
             }
         }
 
@@ -38,9 +43,17 @@ namespace Dor.Blog.Infrastructure
         {
             get
             {
-                return _authenticationRepository = _authenticationRepository ?? new AuthenticationRepository(_signInManager, _context);
+                return _authenticationRepository = _authenticationRepository ?? new AuthenticationRepository(_signInManager);
             }
-        }      
+        }
+
+        public IBlogRepository BlogRepository
+        {
+            get
+            {
+                return _blogRepository = _blogRepository ?? new BlogRepository(_context);
+            }
+        }
 
         public void BeginTransaction()
         {
@@ -56,7 +69,12 @@ namespace Dor.Blog.Infrastructure
         {
             
         }
-        
+
+        public async Task SaveAsync()
+        {
+            await _context.SaveChangesAsync();
+        }
+
     }
 
 }

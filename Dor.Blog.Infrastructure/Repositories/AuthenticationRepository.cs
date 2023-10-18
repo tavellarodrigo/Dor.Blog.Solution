@@ -6,21 +6,14 @@ using Microsoft.AspNetCore.Identity;
 
 namespace Generic.Data.Repositories
 {
-    public class AuthenticationRepository : Repository<User>, IAuthenticationRepository
+    public class AuthenticationRepository : IAuthenticationRepository
     {
-        private readonly SignInManager<User> _signInManager;
-        private readonly DataContext _context;
+        private readonly SignInManager<User> _signInManager;        
 
-        public AuthenticationRepository(SignInManager<User> signInManager, DataContext context) : base(context)
+        public AuthenticationRepository(SignInManager<User> signInManager)
         {
-            _signInManager = signInManager;
-            _context = context;
-        }
-        
-        public async Task<User> Authenticate(Credential credential)
-        {         
-            return new User();
-        }        
+            _signInManager = signInManager;            
+        }           
 
         public async Task<SignInResult> CheckPasswordSignInAsync(User user, string password)
         {

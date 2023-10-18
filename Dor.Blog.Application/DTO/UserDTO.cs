@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Dor.Blog.Application.DTO
 {
-    public class UserDTO
+    public record UserDTO
     {
         public string Name { get; set; } = String.Empty;
         public string LastName { get; set; } = String.Empty;

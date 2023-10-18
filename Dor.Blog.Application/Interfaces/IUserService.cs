@@ -2,8 +2,8 @@
 
 namespace Dor.Blog.Application.Interfaces
 {
-    public interface IUserService : IService<User>
+    public interface IUserService 
     {
-        Task<User> CreateAsync(User user,string password);
+        Task <BaseResponse<User>> CreateAsync(User user,string password);
     }
 }

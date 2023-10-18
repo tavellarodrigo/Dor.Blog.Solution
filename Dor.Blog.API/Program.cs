@@ -126,6 +126,9 @@ builder.Services.AddScoped<IAuthenticationRepository, AuthenticationRepository>(
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 
+//builder.Services.AddScoped<IBlogRepository, BlogRepository>();
+//builder.Services.AddScoped<IBlogService, BlogService>();
+
 
 //Mapper
 var mappingConfig = new MapperConfiguration(mc => { mc.AddProfile(new MappingsProfile()); });

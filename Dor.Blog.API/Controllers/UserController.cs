@@ -28,22 +28,19 @@ namespace Dor.Blog.API.Controllers
 
         [HttpPost]
         public async Task<IActionResult> CreateAsync(UserDTO userDTO)
-        {
-            
+        {            
             var user = _mapper.Map<UserDTO, User>(userDTO);
             user.RoleNames = new List<string>
             {
                 "Admin"
             };
 
-            string password = userDTO.Password;
+            string password = userDTO.Password;            
             var result = await _userService.CreateAsync(user, password);
-            if (result == null)
+            if (!result.Successful)
             {
-                return UnprocessableEntity();                
-
+                return UnprocessableEntity(result.errors.ToString()); 
             }
-
             return Ok(userDTO);
         }
 

@@ -31,11 +31,9 @@ namespace Dor.Middleware
                 };
 
                 context.Features.Set<IExceptionHandlerFeature>(exceptionHandlerFeature);
-
-                // Log de la excepción (opcional)
+                
                 LogException(ex);
-
-                // Configurar la respuesta de error
+                
                 context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
                 context.Response.ContentType = "application/json";
 
@@ -52,8 +50,8 @@ namespace Dor.Middleware
         }
         private void LogException(Exception exception)
         {
-            // Puedes realizar la lógica de registro aquí
-            // Por ejemplo, usando un sistema de registro como Serilog, log4net, etc.
+            
+            // Serilog, log4net
         }
     }
 

@@ -1,14 +1,14 @@
 ﻿using AutoMapper;
+using Dor.Blog.Application.DTO;
 using Dor.Blog.Application.Interfaces;
-using Microsoft.AspNetCore.Authorization;
+using Dor.Blog.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Hosting;
 
 namespace Dor.Blog.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    //[Authorize(Policy = "RequireAdministratorRole")]
-    [Authorize]
     public class BlogController : ControllerBase
     {
         private readonly IBlogService _blogService;
@@ -20,61 +20,68 @@ namespace Dor.Blog.API.Controllers
             _mapper = mapper;   
         }
 
+        [HttpPost]
+        public async Task<ActionResult<BlogPost>> Post([FromBody] PostForCreateDTO post)
+        {
+            var newPost = _mapper.Map<PostForCreateDTO, BlogPost>(post);
 
+            var result = await _blogService.CreateAsync(newPost);               
+            if (!result.Successful)
+                return NotFound();
 
-        //[HttpGet]        
-        //public async Task<ActionResult<IEnumerable<BlogPost>>> Get()
-        //{
-        //    var posts = await _blogService.GetPostsAsync();
-        //    return Ok(posts);
-        //}
+            return CreatedAtAction(nameof(Post), new { id = newPost.Id }, newPost);
+        }
 
-        //[HttpGet("{id}")]
-        //public async Task<ActionResult<BlogPost>> Get(int id)
-        //{
-        //    var post = await _blogService.GetPostByIdAsync(id);
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<PostDTO>>> GetAll()
+        {
+            var result = await _blogService.GetAsync();
+            if (!result.Successful)
+                return BadRequest(result.errors);
 
-        //    if (post == null)
-        //    {
-        //        return NotFound();
-        //    }
+            return Ok(result.DataResponse);
+        }
 
-        //    return Ok(post);
-        //}
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Put(int id, [FromBody] PostForUpdateDTO updatedPostDTO)
+        {
+            var updatedPost = _mapper.Map<PostForUpdateDTO, BlogPost>(updatedPostDTO);
 
-        //[HttpPost]
-        //public async Task<ActionResult<BlogPost>> Post([FromBody] BlogPost newPost)
-        //{
-        //    var postId = await _blogService.CreatePostAsync(newPost);
-        //    newPost.Id = postId;
-        //    return CreatedAtAction(nameof(Get), new { id = postId }, newPost);
-        //}
+            var result = await _blogService.UpdateAsync(id, updatedPost);
 
-        //[HttpPut("{id}")]
-        //public async Task<IActionResult> Put(int id, [FromBody] BlogPost updatedPost)
-        //{
-        //    var success = await _blogService.UpdatePostAsync(updatedPost);
+            if (!result.Successful)
+            {
+                return BadRequest(result.errors);
+            }
 
-        //    if (!success)
-        //    {
-        //        return NotFound();
-        //    }
+            return Ok(result.DataResponse);
+        }
 
-        //    return NoContent();
-        //}
+        [HttpGet("{id}")]
+        public async Task<ActionResult<BlogPost>> Get(int id)
+        {
+            var result = await _blogService.GetByIdAsync(id);
 
-        //[HttpDelete("{id}")]
-        //public async Task<IActionResult> Delete(int id)
-        //{
-        //    var success = await _blogService.DeletePostAsync(id);
-        //    if (!success)
-        //    {
-        //        return NotFound();
-        //    }
+            if (!result.Successful)
+            {
+                return NotFound(result.DataResponse);
+            }
 
-        //    return NoContent();
+            return Ok(result.DataResponse);
+        }
 
-        //}
-    }    
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var result = await _blogService.DeleteAsync(id);
+            if (!result.Successful)
+            {
+                return NotFound();
+            }
+
+            return Ok();
+
+        }
+    }
 }
         

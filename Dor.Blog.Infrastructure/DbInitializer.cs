@@ -1,26 +1,21 @@
-﻿using Dor.Blog.Application.Interfaces;
-using Dor.Blog.Domain.Entities;
+﻿using Dor.Blog.Domain.Entities;
 using Dor.Blog.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Identity;
-using System.Security.Claims;
 using System.Transactions;
 
 namespace Dor.Blog.Infrastructure
 {
 
     public class DbInitializer
-    {   
+    {  
 
         public async Task InitializeAsync(UserManager<User> _userManager, RoleManager<IdentityRole> _roleManager, DataContext _dbContext)
-        {
-            
-
-
+        {   
             ArgumentNullException.ThrowIfNull(_dbContext, nameof(_dbContext));
             _dbContext.Database.EnsureCreated();
 
-
-            if (_dbContext.Users.Any()) return;
+            if (_dbContext.Users.Any()) 
+                return;
 
             User user = new User
             {
@@ -43,9 +38,7 @@ namespace Dor.Blog.Infrastructure
                     await _userManager.AddToRolesAsync(user, user.RoleNames);
                 }
                 scope.Complete();
-            }          
-
+            }
         }
-    }
-   
+    }   
 }
