@@ -1,6 +1,7 @@
 using Dor.Blog.Application.Interfaces;
 using Dor.Blog.Domain.Entities;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 using System.Transactions;
 
@@ -13,17 +14,7 @@ namespace Dor.Blog.Infrastructure.Repositories
         public UserRepository(UserManager<User> userManager)
         {
             _userManager = userManager;            
-        }
-
-        public Task AddAsync(User entity)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task AddRangeAsync(IEnumerable<User> entities)
-        {
-            throw new NotImplementedException();
-        }
+        }  
 
         public async Task<User> CreateUser(User User, String Password)
         {
@@ -45,6 +36,12 @@ namespace Dor.Blog.Infrastructure.Repositories
             return User;
         }
 
+        public async Task<IEnumerable<User>?> GetAll()
+        {            
+            var users = await _userManager.Users.ToListAsync();
+            return users;
+        }
+
         public async Task<User?> GetUserByUserName(string userName)
         { 
 
@@ -58,7 +55,12 @@ namespace Dor.Blog.Infrastructure.Repositories
             userSearched.RoleNames = roles;
             
             return userSearched;
-        }              
+        }
+
+        public async Task<User?> SingleOrDefaultAsync(Expression<Func<User, bool>> predicate)
+        {
+            return await _userManager.Users.FirstOrDefaultAsync(predicate);
+        }
     }
 }
 

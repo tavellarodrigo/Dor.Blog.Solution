@@ -10,22 +10,19 @@ namespace Dor.Blog.Infrastructure
     {
         
         private readonly DataContext _context;        
-
-        private readonly RoleManager<IdentityRole> _roleManager;
+        
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
         private UserRepository _userRepository;
         private AuthenticationRepository _authenticationRepository;
         private BlogRepository _blogRepository;
 
-
         public UnitOfWork(DataContext context, 
             RoleManager<IdentityRole> roleManager, 
             UserManager<User> userManager, 
             SignInManager<User> signInManager)
         {
-            this._context = context;
-            this._roleManager = roleManager;
+            this._context = context;            
             this._userManager = userManager;
             this._signInManager = signInManager;
             

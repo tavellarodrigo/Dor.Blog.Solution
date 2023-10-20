@@ -21,32 +21,40 @@ namespace Dor.Blog.Application.Services
 
         }
         
-        public async Task<User> Authenticate(Credential credential)
-        {
-            //Search for user filtering by userName
+        /// <summary>
+        /// Get token to create Users
+        /// </summary>
+        /// <param name="credential"></param>
+        /// <returns></returns>
+        public async Task<BaseResponse<User>> Authenticate(Credential credential)
+        { 
+            //look for user
             var user = await _unitOfWork.UserRepository.GetUserByUserName(credential.UserName);
 
             if (user == null)
             {
-                var error = new InvalidOperationException("User doesn't exists");
-                return await Task.FromException<User>(error);
-
+                return new BaseResponse<User>(null, false, "User doesn't exists");
             }
 
+            //user exists then check user and password
             var res = await _unitOfWork.AuthenticationRepository.CheckPasswordSignInAsync(user, credential.Password);
 
             if (!res.Succeeded)
-            {
-                var error = new InvalidOperationException("Username or Password doesn't match.");
-                return await Task.FromException<User>(error);
+            {                
+                return new BaseResponse<User>(null, false, "Username or Password doesn't match.");
             }
 
             //generate token
             user.token = await GenerateJwtToken(user);
 
-            return user;
+            return new BaseResponse<User>(user);
         }
 
+        /// <summary>
+        /// Generate token
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns></returns>
         private async Task<string> GenerateJwtToken(User user)
         {
             string secretKey = _config.GetSection("JWT:SecretKey").Value ?? "";

@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace Dor.Blog.Application.Authorization
+﻿namespace Dor.Blog.Application.Authorization
 {
     public record CredentialDTO
     {

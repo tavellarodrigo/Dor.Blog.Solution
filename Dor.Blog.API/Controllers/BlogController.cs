@@ -1,9 +1,13 @@
 ﻿using AutoMapper;
+using Azure.Core;
+using Dor.Blog.Application.Authorization;
+using Dor.Blog.Application.Behaviors;
 using Dor.Blog.Application.DTO;
 using Dor.Blog.Application.Interfaces;
 using Dor.Blog.Domain.Entities;
+using FluentValidation;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Hosting;
 
 namespace Dor.Blog.API.Controllers
 {
@@ -13,21 +17,42 @@ namespace Dor.Blog.API.Controllers
     {
         private readonly IBlogService _blogService;
         private readonly IMapper _mapper;
+        private readonly ILogger<AuthenticationController> _logger;
+        private readonly IValidator<PostForCreateDTO> _validator;
 
-        public BlogController(IBlogService blogService, IMapper mapper)
+        public BlogController(IBlogService blogService, 
+            IMapper mapper, 
+            ILogger<AuthenticationController> logger,
+            IValidator<PostForCreateDTO> validator)
         {
             _blogService = blogService;
             _mapper = mapper;   
+            _logger = logger;
+            _validator = validator;
+
         }
 
         [HttpPost]
         public async Task<ActionResult<BlogPost>> Post([FromBody] PostForCreateDTO post)
         {
+            _logger.LogInformation(String.Join(" ", LogMessages.Started, " Post: ", post));
+
+            var resultValidation = _validator.Validate(post);
+            if (!resultValidation.IsValid)
+            {
+                return BadRequest(resultValidation.Errors);
+            }
+
             var newPost = _mapper.Map<PostForCreateDTO, BlogPost>(post);
 
-            var result = await _blogService.CreateAsync(newPost);               
+            var result = await _blogService.CreateAsync(newPost);
             if (!result.Successful)
-                return NotFound();
+            {
+                _logger.LogInformation(LogMessages.NotFound);
+                return NotFound(result.errors);
+            }
+
+            _logger.LogInformation(LogMessages.Finished);
 
             return CreatedAtAction(nameof(Post), new { id = newPost.Id }, newPost);
         }
@@ -62,9 +87,9 @@ namespace Dor.Blog.API.Controllers
         {
             var result = await _blogService.GetByIdAsync(id);
 
-            if (!result.Successful)
+            if (!result.Successful || result.DataResponse == null)
             {
-                return NotFound(result.DataResponse);
+                return NotFound(String.Join(" ", "Id not found " + id.ToString()));
             }
 
             return Ok(result.DataResponse);

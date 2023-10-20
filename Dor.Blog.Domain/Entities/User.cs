@@ -5,6 +5,7 @@ namespace Dor.Blog.Domain.Entities
 {
     public class User : IdentityUser
     {
+        //random fields, just for simulate a real case
         public string Name { get; set; }=String.Empty;
         public string LastName { get; set; } = String.Empty;
         public int Status { get; set; } = 1;

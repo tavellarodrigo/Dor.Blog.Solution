@@ -1,7 +1,5 @@
-using Dor.Blog.Application.Authorization;
 using Dor.Blog.Application.Interfaces;
 using Dor.Blog.Domain.Entities;
-using Dor.Blog.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Identity;
 
 namespace Generic.Data.Repositories

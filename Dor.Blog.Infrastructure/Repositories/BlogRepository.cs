@@ -15,10 +15,10 @@ namespace Dor.Blog.Infrastructure.Repositories
             _context = context;
         }
 
-        public async Task<int> AddAsync(BlogPost entity)
+        public async Task AddAsync(BlogPost entity)
         {
-            var blog = await _context.AddAsync(entity);
-            return entity.Id;
+            await _context.AddAsync(entity);
+            
         }
 
         public async Task<IEnumerable<BlogPost>?> GetAllAsync()
@@ -29,7 +29,7 @@ namespace Dor.Blog.Infrastructure.Repositories
 
         public async Task<BlogPost?> GetByIdAsync(int id)
         {
-            return await _context.BlogPosts.FirstOrDefaultAsync(i => i.Id == id);
+            return await _context.BlogPosts.Include("User").FirstOrDefaultAsync(i => i.Id == id);
         }
 
         public void Remove(BlogPost entity)

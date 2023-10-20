@@ -22,8 +22,7 @@ namespace Dor.Blog.Infrastructure.Utils
         
             CreateMap<PostForCreateDTO, BlogPost>();
 
-            CreateMap<PostDTO, BlogPost>();
-            
+            CreateMap<PostDTO, BlogPost>();            
 
             CreateMap<BlogPost, BlogPost>()
                 .ForSourceMember(source => source.Updated, opt => opt.DoNotValidate())

@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Dor.Blog.Domain.Entities
 {
@@ -12,7 +14,9 @@ namespace Dor.Blog.Domain.Entities
         public DateTime? Updated { get; set; } = null;
         public bool Deleted { get; set; } = false;
 
-        //crear constructor
+        [ForeignKey("User")]
+        public string UserId { get; set; } = string.Empty;
+        public User User { get; set; } = new User();
 
     }
 }

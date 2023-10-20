@@ -36,8 +36,7 @@ namespace Dor.Middleware
                 
                 context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
                 context.Response.ContentType = "application/json";
-
-                // Respuesta JSON personalizada
+                
                 var errorResponse = new
                 {
                     error = "An unexpected error occurred.",

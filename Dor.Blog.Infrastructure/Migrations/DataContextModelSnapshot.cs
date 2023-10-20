@@ -48,7 +48,13 @@ namespace Dor.Blog.Infrastructure.Migrations
                     b.Property<DateTime?>("Updated")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("BlogPosts");
                 });
@@ -260,6 +266,17 @@ namespace Dor.Blog.Infrastructure.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens", (string)null);
+                });
+
+            modelBuilder.Entity("Dor.Blog.Domain.Entities.BlogPost", b =>
+                {
+                    b.HasOne("Dor.Blog.Domain.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

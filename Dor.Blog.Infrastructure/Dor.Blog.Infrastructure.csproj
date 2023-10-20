@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <Compile Remove="Repositories\Repository.cs" />
+    <Compile Remove="Utils\LoggerUtil.cs" />
   </ItemGroup>
 
   <ItemGroup>

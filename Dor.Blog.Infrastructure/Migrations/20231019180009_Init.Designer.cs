@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Dor.Blog.Infrastructure.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20231018193046_post-deleted")]
-    partial class postdeleted
+    [Migration("20231019180009_Init")]
+    partial class Init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
