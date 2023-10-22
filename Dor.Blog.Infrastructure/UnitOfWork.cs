@@ -6,9 +6,11 @@ using Microsoft.AspNetCore.Identity;
 
 namespace Dor.Blog.Infrastructure
 {
+    /// <summary>
+    /// to access the contexts
+    /// </summary>
     public class UnitOfWork : IUnitOfWork
-    {
-        
+    {        
         private readonly DataContext _context;        
         
         private readonly UserManager<User> _userManager;
@@ -18,7 +20,6 @@ namespace Dor.Blog.Infrastructure
         private BlogRepository _blogRepository;
 
         public UnitOfWork(DataContext context, 
-            RoleManager<IdentityRole> roleManager, 
             UserManager<User> userManager, 
             SignInManager<User> signInManager)
         {

@@ -3,17 +3,22 @@ using System.Net;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
+using Microsoft.Extensions.Logging;
 
 namespace Dor.Middleware
 {
+    /// <summary>
+    /// any unhandled exceptions are entered here and log the error message
+    /// </summary>
     public class ExceptionHandlingMiddleware
-    {
-        //private readonly ILoggerUtil<ExceptionHandlingMiddleware> _logger;        
+    {   
         private readonly RequestDelegate _next;
+        private readonly ILogger<ExceptionHandlingMiddleware> _logger;
 
-        public ExceptionHandlingMiddleware(RequestDelegate next)
+        public ExceptionHandlingMiddleware(RequestDelegate next, ILogger<ExceptionHandlingMiddleware> logger)
         {
             _next = next;
+            _logger = logger;
         }
 
         public async Task InvokeAsync(HttpContext context)
@@ -47,10 +52,10 @@ namespace Dor.Middleware
             }
 
         }
-        private void LogException(Exception exception)
+        private void LogException(Exception e)
         {
-            
-            // Serilog, log4net
+            // Serilog
+            _logger.LogCritical(String.Join(" ","Critical error " ,e.Message));
         }
     }
 

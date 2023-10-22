@@ -5,6 +5,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Dor.Blog.API.Controllers
 {
+    /// <summary>
+    /// to authenticate with token and operate with role-based authorization.
+    /// </summary>
     [Route("api/[controller]")]       
     [ApiController]
     public class AuthenticationController : ControllerBase
@@ -23,8 +26,13 @@ namespace Dor.Blog.API.Controllers
             _mapper = mapper;
             _authenticationService = authenticationService;
             _logger = logger;
-        }  
+        }
 
+        /// <summary>
+        ///  authentication where the token is obtained to perform authorized user actions
+        /// </summary>
+        /// <param name="credentialDTO"></param>
+        /// <returns></returns>
         [HttpPost]
         public async Task<IActionResult> Authenticate(CredentialDTO credentialDTO)
         {

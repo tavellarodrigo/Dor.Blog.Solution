@@ -4,6 +4,9 @@ using Microsoft.AspNetCore.Identity;
 
 namespace Generic.Data.Repositories
 {
+    /// <summary>
+    /// use SignInManager to manipulate user accesses
+    /// </summary>
     public class AuthenticationRepository : IAuthenticationRepository
     {
         private readonly SignInManager<User> _signInManager;        

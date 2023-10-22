@@ -1,5 +1,9 @@
 ﻿namespace Dor.Blog.Domain.Entities
 {
+    /// <summary>
+    /// used for service responses
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public class BaseResponse<T>
     {       
         public T? DataResponse { get; set; }

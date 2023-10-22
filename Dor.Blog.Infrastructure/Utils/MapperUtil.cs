@@ -3,6 +3,9 @@ using Dor.Blog.Application.Interfaces;
 
 namespace Dor.Blog.Infrastructure.Utils
 {
+    /// <summary>
+    /// for entity mapping Auto Mapper
+    /// </summary>
     public class MapperUtil : IMapperUtil
     {
         private readonly IMapper _mapper;

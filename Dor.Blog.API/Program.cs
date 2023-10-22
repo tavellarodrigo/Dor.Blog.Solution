@@ -68,15 +68,6 @@ builder.Services.AddIdentity<User, IdentityRole>(options =>
 .AddDefaultTokenProviders()
 .AddRoles<IdentityRole>();
 
-
-//authorization
-//builder.Services.AddAuthorization(options =>
-//{
-//    options.AddPolicy("RequireAdministratorRole", policy =>
-//        policy.RequireRole("Administrator"));
-//});
-
-
 //authentication
 var secretKey = builder.Configuration.GetValue<string>("JWT:SecretKey");
 var cValidAudience = builder.Configuration.GetValue<string>("JWT:ValidAudience");
@@ -123,6 +114,7 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 
 //Validations
 builder.Services.AddTransient<IValidator<PostForCreateDTO>, PostForCreateDTOValidator>();
+builder.Services.AddTransient<IValidator<UserDTO>, UserDTOValidator>();
 
 //Mapper
 var mappingConfig = new MapperConfiguration(mc => { mc.AddProfile(new MappingsProfile()); });

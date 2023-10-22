@@ -1,45 +1,57 @@
-﻿using Dor.Blog.Application.Authorization;
-using Dor.Blog.Application.Behaviors;
+﻿using Dor.Blog.Application.Behaviors;
 using Dor.Blog.Application.DTO;
 using Dor.Blog.Application.Interfaces;
 using Dor.Blog.Domain.Entities;
+using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 
 namespace Dor.Blog.API.Controllers
 {
-    [Authorize(Roles ="Admin")]
-    [Authorize]
+    [Authorize(Roles ="Admin")]    
     [Route("api/[controller]")]    
     [ApiController]
     public class UserController : ControllerBase
-    {
-        private readonly UserManager<User> _userManager;
-        private readonly SignInManager<User> _signInManager;
+    {        
         private readonly IMapperUtil _mapper;
         private readonly IUserService _userService;
         private readonly ILogger<AuthenticationController> _logger;
+        private readonly IValidator<UserDTO> _validator;
 
-        public UserController(UserManager<User> userManager, SignInManager<User> signInManager, IMapperUtil mapper, IUserService userService, ILogger<AuthenticationController> logger)
+        public UserController(IMapperUtil mapper, 
+            IUserService userService, 
+            ILogger<AuthenticationController> logger,
+              IValidator<UserDTO> validator)
         {
-            _userManager = userManager;
-            _signInManager = signInManager;
+            
             _mapper = mapper;
             _userService = userService;
             _logger = logger;
+            _validator = validator;
         }
 
+        /// <summary>
+        /// create a User 
+        /// </summary>
+        /// <param name="userDTO"></param>
+        /// <returns></returns>
         [HttpPost]
         public async Task<IActionResult> CreateAsync(UserDTO userDTO)
         {
             _logger.LogInformation(String.Join(" ", LogMessages.Started, " User: ", userDTO.UserName));
 
+
+            var resultValidation = _validator.Validate(userDTO);
+            if (!resultValidation.IsValid)
+            {
+                return BadRequest(resultValidation.Errors);
+            }
+
+
             var user = _mapper.Map<UserDTO, User>(userDTO);
             user.RoleNames = new List<string>
             {
-                "Admin"
+                userDTO.RolName
             };
 
             string password = userDTO.Password;            
@@ -54,6 +66,10 @@ namespace Dor.Blog.API.Controllers
             return Ok(userDTO);
         }
 
+        /// <summary>
+        /// get all users 
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public async Task<IActionResult> Get()
         {

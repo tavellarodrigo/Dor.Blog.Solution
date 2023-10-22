@@ -7,6 +7,9 @@ using System.Transactions;
 
 namespace Dor.Blog.Infrastructure.Repositories
 {
+    /// <summary>
+    /// Use Identity UserManager
+    /// </summary>
     public class UserRepository : IUserRepository
     {
         private readonly UserManager<User> _userManager;        
@@ -39,6 +42,11 @@ namespace Dor.Blog.Infrastructure.Repositories
         public async Task<IEnumerable<User>?> GetAll()
         {            
             var users = await _userManager.Users.ToListAsync();
+            foreach (var user in users)
+            {
+                user.RoleNames = await _userManager.GetRolesAsync(user);
+            }
+            
             return users;
         }
 

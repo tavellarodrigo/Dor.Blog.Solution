@@ -5,9 +5,11 @@ using System.Linq.Expressions;
 
 namespace Dor.Blog.Infrastructure.Repositories
 {
+    /// <summary>
+    /// Use Identity and Entity Framework
+    /// </summary>
     public class BlogRepository : IBlogRepository
-    {
-        
+    {        
         private readonly DataContext _context;
 
         public BlogRepository(DataContext context) 

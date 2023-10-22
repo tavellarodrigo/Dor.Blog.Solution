@@ -5,17 +5,13 @@ using Dor.Blog.Domain.Entities;
 
 namespace Dor.Blog.Infrastructure.Utils
 {
+    /// <summary>
+    /// configure Auto Mapper
+    /// </summary>
     public class MappingsProfile : Profile
     {
         public MappingsProfile()
         {
-            ////Generals
-            //CreateMap<string, DateTime>().ConvertUsing(x => DateTime.ParseExact(x, Constants.DateTimeStringFormat, CultureInfo.InvariantCulture));
-            //CreateMap<DateTime, string>().ConvertUsing(x => x.ToString(Constants.DateTimeStringFormat));
-            //CreateMap<string, DateTime?>().ConvertUsing(x => x != null ? DateTime.ParseExact(x, Constants.DateTimeStringFormat, CultureInfo.InvariantCulture) : null);           
-            //ForMember(dest => dest.Date, opt => opt.MapFrom(src => DateTime.Now));
-            
-
             CreateMap<CredentialDTO, Credential>();
          
             CreateMap<UserDTO, User>();

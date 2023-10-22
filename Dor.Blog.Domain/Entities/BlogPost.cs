@@ -4,6 +4,9 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Dor.Blog.Domain.Entities
 {
+    /// <summary>
+    /// main table
+    /// </summary>
     public class BlogPost
     {
         public int Id { get; set; }
@@ -17,6 +20,10 @@ namespace Dor.Blog.Domain.Entities
         [ForeignKey("User")]
         public string UserId { get; set; } = string.Empty;
         public User User { get; set; } = new User();
+
+        //TO DO
+        //add Category Table
+        //add Comment Table
 
     }
 }
