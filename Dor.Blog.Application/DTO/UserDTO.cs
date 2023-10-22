@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Dor.Blog.Application.DTO
+﻿namespace Dor.Blog.Application.DTO
 {
-    public class UserDTO
+    public record UserDTO
     {
         public string Name { get; set; } = String.Empty;
         public string LastName { get; set; } = String.Empty;
@@ -15,6 +9,8 @@ namespace Dor.Blog.Application.DTO
         public string Email { get; set; } = String.Empty;
         public string PhoneNumber { get; set; } = String.Empty;
         public string Password { get; set; } = String.Empty;
+        public string RolName { get; set; } = String.Empty;
+
 
     }
 }

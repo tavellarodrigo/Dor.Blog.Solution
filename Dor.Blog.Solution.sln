@@ -12,12 +12,10 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dor.Blog.Domain", "Dor.Blog.Domain\Dor.Blog.Domain.csproj", "{2B3C62FC-F575-4098-83C1-6E598ACF9889}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{6430C41F-EF1C-478B-99E1-DC4EEDCE1149}"
-	ProjectSection(SolutionItems) = preProject
-		API.Test = API.Test
-		Domain.test = Domain.test
-	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dor.Middleware", "Dor.Middleware\Dor.Middleware.csproj", "{F22146EA-81E7-433E-AF01-74F14ECA6F21}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dor.Middleware", "Dor.Middleware\Dor.Middleware.csproj", "{F22146EA-81E7-433E-AF01-74F14ECA6F21}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dor.Blog.Application.Test", "Dor.Blog.Application.Test\Dor.Blog.Application.Test.csproj", "{996B7528-9673-4503-B828-70C6B5FBCEF9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,9 +43,16 @@ Global
 		{F22146EA-81E7-433E-AF01-74F14ECA6F21}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F22146EA-81E7-433E-AF01-74F14ECA6F21}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F22146EA-81E7-433E-AF01-74F14ECA6F21}.Release|Any CPU.Build.0 = Release|Any CPU
+		{996B7528-9673-4503-B828-70C6B5FBCEF9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{996B7528-9673-4503-B828-70C6B5FBCEF9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{996B7528-9673-4503-B828-70C6B5FBCEF9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{996B7528-9673-4503-B828-70C6B5FBCEF9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{996B7528-9673-4503-B828-70C6B5FBCEF9} = {6430C41F-EF1C-478B-99E1-DC4EEDCE1149}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {DDFB9BDA-57CD-4C35-A822-D10624E03AED}

@@ -5,26 +5,27 @@ using Dor.Blog.Domain.Entities;
 
 namespace Dor.Blog.Infrastructure.Utils
 {
+    /// <summary>
+    /// configure Auto Mapper
+    /// </summary>
     public class MappingsProfile : Profile
     {
         public MappingsProfile()
         {
-            ////Generals
-            //CreateMap<string, DateTime>().ConvertUsing(x => DateTime.ParseExact(x, Constants.DateTimeStringFormat, CultureInfo.InvariantCulture));
-            //CreateMap<DateTime, string>().ConvertUsing(x => x.ToString(Constants.DateTimeStringFormat));
-            //CreateMap<string, DateTime?>().ConvertUsing(x => x != null ? DateTime.ParseExact(x, Constants.DateTimeStringFormat, CultureInfo.InvariantCulture) : null);
-
-            //CreateMap<CredentialDTO, Credential>();
-            ////Specific            
-            ///
             CreateMap<CredentialDTO, Credential>();
-            //.ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.UserName))
-            //.ForMember(dest => dest.Password, opt => opt.MapFrom(src => src.Password));
-
+         
             CreateMap<UserDTO, User>();
-                //.ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.UserName))
-                //.ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.UserName))
-                //;
+        
+            CreateMap<PostForCreateDTO, BlogPost>();
+
+            CreateMap<PostDTO, BlogPost>();            
+
+            CreateMap<BlogPost, BlogPost>()
+                .ForSourceMember(source => source.Updated, opt => opt.DoNotValidate())
+                .ForSourceMember(source => source.Deleted, opt => opt.DoNotValidate())
+                .ForSourceMember(source => source.Id, opt => opt.DoNotValidate());
+            
+            CreateMap<PostForUpdateDTO, BlogPost>();
         }
     }
 }

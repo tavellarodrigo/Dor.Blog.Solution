@@ -5,6 +5,6 @@ namespace Dor.Blog.Application.Interfaces
 {
     public interface IAuthenticationService
     {
-        Task<User> Authenticate(Credential credential);
+        Task<BaseResponse<User>> Authenticate(Credential credential);
     }
 }

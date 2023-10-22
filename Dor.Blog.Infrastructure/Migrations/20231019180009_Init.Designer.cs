@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Dor.Blog.Infrastructure.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20231012212627_Init")]
+    [Migration("20231019180009_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -39,6 +39,9 @@ namespace Dor.Blog.Infrastructure.Migrations
 
                     b.Property<DateTime>("Created")
                         .HasColumnType("datetime2");
+
+                    b.Property<bool>("Deleted")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Title")
                         .IsRequired()

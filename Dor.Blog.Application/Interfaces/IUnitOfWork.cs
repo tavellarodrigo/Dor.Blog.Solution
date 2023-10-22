@@ -1,17 +1,16 @@
 ﻿namespace Dor.Blog.Application.Interfaces
-{
-    // En el proyecto MyProject.Infrastructure
+{    
     public interface IUnitOfWork 
     {
         void BeginTransaction();
         void Commit();
         void Rollback();
-        //Task<User> Authenticate(Credential credential);        
+        Task SaveAsync();
 
         IUserRepository UserRepository { get; }
         IAuthenticationRepository AuthenticationRepository { get; }
-
-        // Otros métodos relacionados con la gestión de transacciones y la persistencia
+        IBlogRepository BlogRepository { get; }
+        
     }
 
 }

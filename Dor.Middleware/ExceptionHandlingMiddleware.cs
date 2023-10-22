@@ -3,17 +3,22 @@ using System.Net;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
+using Microsoft.Extensions.Logging;
 
 namespace Dor.Middleware
 {
+    /// <summary>
+    /// any unhandled exceptions are entered here and log the error message
+    /// </summary>
     public class ExceptionHandlingMiddleware
-    {
-        //private readonly ILoggerUtil<ExceptionHandlingMiddleware> _logger;        
+    {   
         private readonly RequestDelegate _next;
+        private readonly ILogger<ExceptionHandlingMiddleware> _logger;
 
-        public ExceptionHandlingMiddleware(RequestDelegate next)
+        public ExceptionHandlingMiddleware(RequestDelegate next, ILogger<ExceptionHandlingMiddleware> logger)
         {
             _next = next;
+            _logger = logger;
         }
 
         public async Task InvokeAsync(HttpContext context)
@@ -31,15 +36,12 @@ namespace Dor.Middleware
                 };
 
                 context.Features.Set<IExceptionHandlerFeature>(exceptionHandlerFeature);
-
-                // Log de la excepción (opcional)
+                
                 LogException(ex);
-
-                // Configurar la respuesta de error
+                
                 context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
                 context.Response.ContentType = "application/json";
-
-                // Respuesta JSON personalizada
+                
                 var errorResponse = new
                 {
                     error = "An unexpected error occurred.",
@@ -50,10 +52,10 @@ namespace Dor.Middleware
             }
 
         }
-        private void LogException(Exception exception)
+        private void LogException(Exception e)
         {
-            // Puedes realizar la lógica de registro aquí
-            // Por ejemplo, usando un sistema de registro como Serilog, log4net, etc.
+            // Serilog
+            _logger.LogCritical(String.Join(" ","Critical error " ,e.Message));
         }
     }
 

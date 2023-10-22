@@ -1,5 +1,6 @@
 ﻿using Dor.Blog.Application.Interfaces;
 using Dor.Blog.Domain.Entities;
+using System.Linq.Expressions;
 
 namespace Dor.Blog.Application.Services
 {
@@ -10,36 +11,38 @@ namespace Dor.Blog.Application.Services
         public UserService(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
+        }        
+
+        /// <summary>
+        /// create one user 
+        /// </summary>
+        /// <param name="user"></param>
+        /// <param name="password"></param>
+        /// <returns></returns>
+        public async Task<BaseResponse<User>> CreateAsync(User user, string password)
+        {            
+            await _unitOfWork.UserRepository.CreateUser(user, password);            
+            return new BaseResponse<User>(user);
         }
 
-        public async Task<User> CreateAsync(User obj, string password)
+        /// <summary>
+        /// get all users
+        /// </summary>
+        /// <returns></returns>
+        public async Task<BaseResponse<IEnumerable<User>>> GetAllAsync()
         {
-            return await _unitOfWork.UserRepository.CreateUser(obj, password);            
+            var users =  await _unitOfWork.UserRepository.GetAll();
+            return new BaseResponse<IEnumerable<User>>(users);
         }
 
-        public async Task<int> CreateAsync(User obj)
+        /// <summary>
+        /// get one or null user
+        /// </summary>
+        /// <param name="predicate"></param>
+        /// <returns></returns>
+        public async Task<User?> SingleOrDefaultAsync(Expression<Func<User, bool>> predicate)
         {
-            throw new NotImplementedException();
-        }
-
-        public async Task<bool> DeleteAsync(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public async Task<IEnumerable<User>> GetAsync()
-        {
-            throw new NotImplementedException();
-        }
-
-        public async Task<User> GetByIdAsync(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public async Task<bool> UpdateAsync(User post)
-        {
-            throw new NotImplementedException();
+            return await _unitOfWork.UserRepository.SingleOrDefaultAsync(predicate);
         }
     }
 }

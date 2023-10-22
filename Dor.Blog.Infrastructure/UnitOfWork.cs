@@ -6,31 +6,34 @@ using Microsoft.AspNetCore.Identity;
 
 namespace Dor.Blog.Infrastructure
 {
+    /// <summary>
+    /// to access the contexts
+    /// </summary>
     public class UnitOfWork : IUnitOfWork
-    {
-        
+    {        
         private readonly DataContext _context;        
-
-        private readonly RoleManager<IdentityRole> _roleManager;
+        
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
         private UserRepository _userRepository;
         private AuthenticationRepository _authenticationRepository;
+        private BlogRepository _blogRepository;
 
-
-        public UnitOfWork(DataContext context, RoleManager<IdentityRole> roleManager, UserManager<User> userManager, SignInManager<User> signInManager)
+        public UnitOfWork(DataContext context, 
+            UserManager<User> userManager, 
+            SignInManager<User> signInManager)
         {
-            this._context = context;
-            this._roleManager = roleManager;
+            this._context = context;            
             this._userManager = userManager;
             this._signInManager = signInManager;
+            
         }
 
         public IUserRepository UserRepository
         {
             get
             {
-                return _userRepository = _userRepository ?? new UserRepository(_userManager, _context);
+                return _userRepository = _userRepository ?? new UserRepository(_userManager);
             }
         }
 
@@ -38,26 +41,38 @@ namespace Dor.Blog.Infrastructure
         {
             get
             {
-                return _authenticationRepository = _authenticationRepository ?? new AuthenticationRepository(_signInManager, _context);
+                return _authenticationRepository = _authenticationRepository ?? new AuthenticationRepository(_signInManager);
             }
-        }      
+        }
+
+        public IBlogRepository BlogRepository
+        {
+            get
+            {
+                return _blogRepository = _blogRepository ?? new BlogRepository(_context);
+            }
+        }
 
         public void BeginTransaction()
         {
-            // Iniciar transacción
+            
         }
 
         public void Commit()
         {
-            // Confirmar transacción
+            
         }
 
         public void Rollback()
         {
-            // Revertir transacción
+            
         }
 
-        // Otros métodos relacionados con la gestión de transacciones y la persistencia
+        public async Task SaveAsync()
+        {
+            await _context.SaveChangesAsync();
+        }
+
     }
 
 }

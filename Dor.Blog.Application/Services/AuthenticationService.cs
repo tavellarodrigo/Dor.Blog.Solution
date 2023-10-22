@@ -21,51 +21,62 @@ namespace Dor.Blog.Application.Services
 
         }
         
-        public async Task<User> Authenticate(Credential credential)
-        {
-            //Search for user filtering by userName
+        /// <summary>
+        /// Get token to create Users
+        /// </summary>
+        /// <param name="credential"></param>
+        /// <returns></returns>
+        public async Task<BaseResponse<User>> Authenticate(Credential credential)
+        { 
+            //look for user
             var user = await _unitOfWork.UserRepository.GetUserByUserName(credential.UserName);
 
             if (user == null)
             {
-                var error = new InvalidOperationException("User doesn't exists");
-                return await Task.FromException<User>(error);
-
+                return new BaseResponse<User>(null, false, "User doesn't exists");
             }
 
-            var res = await _unitOfWork.AuthenticationRepository.CheckUsernameAndPassword(user, credential.Password);
+            //user exists then check user and password
+            var res = await _unitOfWork.AuthenticationRepository.CheckPasswordSignInAsync(user, credential.Password);
 
             if (!res.Succeeded)
-            {
-                var error = new InvalidOperationException("Username or Password doesn't match.");
-                return await Task.FromException<User>(error);
+            {                
+                return new BaseResponse<User>(null, false, "Username or Password doesn't match.");
             }
 
-            //generate token            
-            string secretKey = _config.GetSection("SecretKey").Value ?? "";           
+            //generate token
+            user.token = await GenerateJwtToken(user);
 
-            //user.token = GenerateJwtToken(user.UserName??"",secretKey);
-            user.token = await GenerateJwtToken(user, secretKey);
-
-            return user;
+            return new BaseResponse<User>(user);
         }
 
-        private async Task<string> GenerateJwtToken(User user, string secret)
+        /// <summary>
+        /// Generate token
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns></returns>
+        private async Task<string> GenerateJwtToken(User user)
         {
-            var secretKey = Encoding.UTF8.GetBytes("RodrigoPaola.2905");
+            string secretKey = _config.GetSection("JWT:SecretKey").Value ?? "";
+
             var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                 new Claim(ClaimTypes.Name, user.UserName??"")
             };
 
+            foreach (var role in user.RoleNames){
+                claims.Add(new Claim(ClaimTypes.Role, user.RoleNames.FirstOrDefault() ?? ""));
+            }
+            
+
             // generate the JWT
             var jwt = new JwtSecurityToken(
-                    //claims: claims,
-                    notBefore: DateTime.UtcNow,
-                    expires: DateTime.Now.AddHours(30),
+                    claims: claims,
+                    notBefore: DateTime.Now,
+                    expires: DateTime.Now.AddMinutes(30),
                     signingCredentials: new SigningCredentials(
-                        new SymmetricSecurityKey(secretKey),
+                        new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey)),
                         SecurityAlgorithms.HmacSha256Signature)
                 );
 

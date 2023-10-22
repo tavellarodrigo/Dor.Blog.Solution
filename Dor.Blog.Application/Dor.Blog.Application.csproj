@@ -7,16 +7,18 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Behaviors\Logger.cs" />
+    <Compile Remove="Interfaces\ILoggerUtil.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Dor.Blog.Domain\Dor.Blog.Domain.csproj" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="FluentValidation" Version="11.8.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Abstractions" Version="2.2.0" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.24.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="UseCases\" />
   </ItemGroup>
 
 </Project>
